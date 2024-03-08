@@ -1,0 +1,32 @@
+package org.example.commands;
+
+import org.example.command_support.Command;
+import org.example.command_support.ProductComparator;
+import org.example.controller.ConsoleManager;
+import org.example.dao.CollectionManager;
+
+public class SaveCommand extends Command {
+    @Override
+    public void execute() {
+        if (ConsoleManager.getIsCommandArg()) {
+            System.out.println("У команды не должно быть аргумента!");
+        } else {
+            CollectionManager collectionManager = this.app.getCollectionManager();
+            ProductComparator productComparator = new ProductComparator();
+            collectionManager.sort(productComparator);
+            collectionManager.save();
+            System.out.println("✓Коллекция сохранена");
+        }
+
+    }
+
+    @Override
+    public String getDescription() {
+        return "сохранить коллекцию в файл";
+    }
+
+    @Override
+    public String getName() {
+        return "save";
+    }
+}
