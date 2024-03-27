@@ -2,22 +2,24 @@ package org.example.commands;
 
 import org.example.command_support.Command;
 import org.example.controller.ConsoleManager;
+import org.example.controller.ReqWriter;
 import org.example.dao.CollectionManager;
 import org.example.model.Product;
+import org.example.service.Request;
 
 import java.io.Console;
 
 public class InfoCommand extends Command {
     @Override
     public void execute() {
-        if (ConsoleManager.getIsCommandArg()) {
-            System.out.println("У команды не должно быть аргумета!");
+        if (Request.isCommandArg()) {
+            ReqWriter.write("У команды не должно быть аргумета!");
         } else {
             CollectionManager collectionManager = this.app.getCollectionManager();
-            System.out.println("Информация о коллекции:");
-            System.out.println("Тип коллекции: " + collectionManager.getProducts().getClass().getSimpleName());
-            System.out.println("Тип элементов коллекции: " + Product.class.getSimpleName());
-            System.out.println("Количество элементов: " + collectionManager.getSize());
+            ReqWriter.write("Информация о коллекции:");
+            ReqWriter.write("Тип коллекции: " + collectionManager.getProducts().getClass().getSimpleName());
+            ReqWriter.write("Тип элементов коллекции: " + Product.class.getSimpleName());
+            ReqWriter.write("Количество элементов: " + collectionManager.getSize());
 
 
         }

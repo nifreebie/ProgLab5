@@ -5,11 +5,13 @@ import org.example.command_support.ProductComparator;
 import org.example.controller.ConsoleManager;
 import org.example.dao.CollectionManager;
 import org.example.model.ProductDTO;
+import org.example.service.Request;
 
 public class AddCommand extends Command {
+
     @Override
     public void execute() {
-        if (ConsoleManager.getIsCommandArg()) {
+        if (Request.isCommandArg()) {
             System.out.println("У команды не доджно быть аргумента!");
         } else {
             ProductCreator productCreator = new ProductCreator();

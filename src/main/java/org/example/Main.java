@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.command_support.CommandManager;
 import org.example.command_support.ProductComparator;
+import org.example.controller.BufferedLineReader;
 import org.example.controller.ConsoleManager;
 import org.example.controller.ValidReader;
 import org.example.dao.CollectionManager;
@@ -24,6 +25,8 @@ public class Main {
 
     private static void initAppContainer() {
         AppContainer app = AppContainer.getInstance();
+        BufferedLineReader reader = new BufferedLineReader(System.in);
+        app.setBufferedLineReader(reader);
         CommandManager commandManager = new CommandManager();
         app.setCommandManager(commandManager);
     }

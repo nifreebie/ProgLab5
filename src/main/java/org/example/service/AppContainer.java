@@ -20,6 +20,7 @@ public class AppContainer {
 
     private CollectionManager collectionManager;
     private CommandManager commandManager;
+    private BufferedLineReader bufferedLineReader;
     private final Deque<File> scriptsStack = new ArrayDeque<>();
 
     private AppContainer() {
@@ -37,6 +38,10 @@ public class AppContainer {
             return null;
         }
         return scriptsStack.getLast();
+    }
+
+    public boolean isInteractiveMode() {
+        return !scriptsStack.isEmpty();
     }
 
 

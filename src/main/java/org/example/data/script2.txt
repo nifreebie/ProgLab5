@@ -1,2 +1,12 @@
-execute_script script1
 show
+info
+add
+ksfcmskc
+1
+1
+1
+1
+1
+1
+1
+1

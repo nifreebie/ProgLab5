@@ -3,28 +3,30 @@ package org.example.commands;
 import org.example.command_support.Command;
 import org.example.command_support.CommandWithIdArgument;
 import org.example.controller.ConsoleManager;
+import org.example.controller.ReqWriter;
 import org.example.dao.CollectionManager;
+import org.example.service.Request;
 
 public class RemoveByIDCommand extends Command implements CommandWithIdArgument {
     @Override
     public void execute() {
-        if (!ConsoleManager.getIsCommandArg()) {
-            System.out.println("У команды должен быть аргумент!");
+        if (!Request.isCommandArg()) {
+            ReqWriter.write("У команды должен быть аргумент!");
         } else {
-            if (checkArgForId(ConsoleManager.getCommandArg())) {
+            try {
                 CollectionManager collectionManager = this.app.getCollectionManager();
                 if (collectionManager.getSize() == 0) {
-                    System.out.println("Коллекция пустая");
+                    ReqWriter.write("Коллекция пустая");
                 } else {
-                    long findId = Long.parseLong(ConsoleManager.getCommandArg());
+                    long findId = Request.getArgId();
                     if (!collectionManager.isIdExists(findId)) System.out.println("Такого id не существует!");
                     else {
                         app.getCollectionManager().removeById(findId);
-                        System.out.println("✓Продукт с id: " + findId + " был удален");
+                        ReqWriter.write("✓Продукт с id: " + findId + " был удален");
                     }
                 }
-            } else {
-                System.out.println("Неверный формат ввода аргумента!");
+            } catch (NumberFormatException e) {
+                ReqWriter.write("Неверный формат ввода аргумента!");
             }
         }
     }

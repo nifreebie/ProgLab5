@@ -28,7 +28,6 @@ public class Product {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
     @JacksonXmlProperty(localName = "price")
-    @JacksonXmlElementWrapper
     private int price;
     @JacksonXmlProperty(localName = "partNumber")
     private String partNumber;

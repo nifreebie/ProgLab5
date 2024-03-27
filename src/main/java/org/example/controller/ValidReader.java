@@ -1,6 +1,8 @@
 package org.example.controller;
 
+import org.example.command_support.StopExecuteScriptException;
 import org.example.model.*;
+import org.example.service.AppContainer;
 import org.example.validation.ValidationException;
 import org.example.validation.Validator;
 import org.example.validation.rules.*;
@@ -9,38 +11,37 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ValidReader {
-    private static Scanner sc = new Scanner(System.in);
 
     public static String readName() {
-        System.out.println("Введите имя:");
+        ReqWriter.write("Введите имя:");
         return readValidValue();
     }
 
     public static Integer readCoordinateX() {
-        System.out.println("Введите координату x:");
+        ReqWriter.write("Введите координату x:");
         return Integer.parseInt(readValidValue(List.of(new MinRule(-497), new IntRule())));
 
     }
 
     public static Float readCoordinateY() {
-        System.out.println("Введите координату y:");
+        ReqWriter.write("Введите координату y:");
         return Float.parseFloat(readValidValue(List.of(new MaxRule(745f), new FloatRule())));
     }
 
     public static int readPrice() {
-        System.out.println("Введите цену:");
+        ReqWriter.write("Введите цену:");
         return Integer.parseInt(readValidValue(List.of(new MinRule(1), new IntRule())));
     }
 
     public static String readPartNumber() {
-        System.out.println("Введите partNumber:");
+        ReqWriter.write("Введите partNumber:");
         return readValidValue(List.of(new StringLengthRule(74)));
     }
 
     public static UnitOfMeasure readUnitOfMeasure() {
-        System.out.println("Выберите единицу измерения:");
+        ReqWriter.write("Выберите единицу измерения:");
         for (int i = 0; i < UnitOfMeasure.values().length; i++) {
-            System.out.println(" • " + i + " - " + UnitOfMeasure.values()[i]);
+            ReqWriter.write(" • " + i + " - " + UnitOfMeasure.values()[i]);
         }
         String uofm = readValidValue(List.of(new IntRule(), new EnumRule(UnitOfMeasure.values())), false);
         return UnitOfMeasure.values()[Integer.parseInt(uofm)];
@@ -48,21 +49,21 @@ public class ValidReader {
     }
 
     public static Long readEmployeesCount() {
-        System.out.println("Введите количесство сотрдуников:");
+        ReqWriter.write("Введите количесство сотрдуников:");
         return Long.parseLong(readValidValue(List.of(new MinRule(1), new LongRule())));
     }
 
     public static OrganizationType readOrganizationType() {
-        System.out.println("Выберите тип организации:");
+        ReqWriter.write("Выберите тип организации:");
         for (int i = 0; i < OrganizationType.values().length; i++) {
-            System.out.println(" • " + i + " - " + OrganizationType.values()[i]);
+            ReqWriter.write(" • " + i + " - " + OrganizationType.values()[i]);
         }
         String ot = readValidValue(List.of(new IntRule(), new EnumRule(OrganizationType.values())), false);
         return OrganizationType.values()[Integer.parseInt(ot)];
     }
 
     public static Address readAddress() {
-        System.out.println("Введите адрес:");
+        ReqWriter.write("Введите адрес:");
         String street = readValidValue(List.of(), true);
         return new Address(street);
     }
@@ -75,7 +76,7 @@ public class ValidReader {
     }
 
     public static String readOrganizationName() {
-        System.out.println("Введите имя организации:");
+        ReqWriter.write("Введите имя организации:");
         return readValidValue();
     }
 
@@ -88,8 +89,10 @@ public class ValidReader {
     }
 
     private static String readValidValue(List<Rule> rules, boolean nullable) {
+        AppContainer appContainer = AppContainer.getInstance();
+        BufferedLineReader reader = appContainer.getBufferedLineReader();
         while (true) {
-            String input = sc.nextLine().trim().toLowerCase();
+            String input = reader.nextLine().trim().toLowerCase();
             if (nullable && input.isBlank()) {
                 return null;
             }
@@ -98,7 +101,10 @@ public class ValidReader {
                 return input;
             } catch (ValidationException e) {
                 for (String errorMsg : e.getErrors()) {
-                    System.out.println(errorMsg);
+                    ReqWriter.write(errorMsg);
+                }
+                if (appContainer.isInteractiveMode()) {
+                    throw new StopExecuteScriptException();
                 }
             }
         }
