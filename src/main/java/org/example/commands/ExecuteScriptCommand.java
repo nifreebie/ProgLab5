@@ -23,7 +23,7 @@ public class ExecuteScriptCommand extends Command {
         if (!Request.isCommandArg()) {
             ReqWriter.write("У команды должен быть аргумент!");
         } else {
-            File scriptFile = new File(Request.getCommandName());
+            File scriptFile = new File(Request.getCommandArg());
             if (this.app.getScriptsStack().contains(scriptFile)) {
                 ReqWriter.write("Попытка вызвать скрипт, который уже исполняется!");
                 isError = true;
